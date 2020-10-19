@@ -1,0 +1,4 @@
+git - online version control
+shell - shell, original low-level computing
+bash - born again shell -> software for accessing the shell, with superior functions to cmd
+cmdpromt - software for accessing the shell (typical windows software)

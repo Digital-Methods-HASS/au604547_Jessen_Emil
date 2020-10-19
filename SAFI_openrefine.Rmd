@@ -1,0 +1,145 @@
+---
+title: "SAFI_openrefine"
+author: "Emil Jessen"
+date: "17 sep 2020"
+output:
+  html_document: default
+  pdf_document: default
+---
+1.
+a) Good column names
+b) No colour coding
+c) Readme files
+d) No comments, other than in a comment column
+e) Missing data, use NA's, not zeros
+f) One data frame per. document/sheet
+g) Only 1-piece of information per block
+h) Be considerate of formatting of dates
+i) Consistency in variables
+
+2.
+No
+
+
+3.
+I did it in R, it is at the bottom, under "Which 2 month(s) are the most water-deprived/driest for the interviewed farmer households?"
+
+4.
+Described same place as 3.
+
+
+
+
+
+
+
+
+
+
+#Answer to question 3, homework is at the bottom
+
+```{r}
+library(pacman)
+setwd("C:/Users/Lenovo/Desktop/wd/cultural_data_science")
+p_load(tidyverse, stringr)
+safi <- read.csv("SAFI_openrefine.csv", header=T)
+```
+
+Cleaning up safi document
+```{r}
+unique(safi$village)
+
+length(safi$village[safi$village == "Ruaca"])
+
+safi$village[safi$village == "49"] <- NA
+safi$village[safi$village == "Chirodzo"] <- "Chirdozo" 
+safi$village[safi$village == "Ruca"] <- "Ruaca"
+safi$village[safi$village == "Ruca-Nhamuenda"] <- "Ruaca - Nhamuenda"
+
+```
+
+How many unique days are spent in the team
+```{r}
+print(length(unique(safi$interview_date)))
+
+# = 19
+```
+
+Which items_owned is the frequently recurring item?
+```{r}
+safi$items_owned_replaced <- gsub("\\[", "", safi$items_owned)
+safi$items_owned_replaced <- gsub("\\]", "", safi$items_owned_replaced)
+safi$items_owned_replaced <- gsub("\\;", "", safi$items_owned_replaced)
+safi$items_owned_replaced <- gsub("\\'", "", safi$items_owned_replaced)
+safi$items_owned_replaced <- gsub("   ", " ", safi$items_owned_replaced)
+safi$items_owned_replaced <- strsplit(safi$items_owned_replaced, " ")
+unique(unlist(safi$items_owned_replaced))
+complete_list1 <- unlist(safi$items_owned_replaced)
+complete_list1[complete_list1 == "" |complete_list1 == "NULL" ] <- NA
+complete_list1 <- complete_list1[!is.na(complete_list1)]
+
+print(table(complete_list1))
+
+
+```
+
+Which 2 month(s) are the most water-deprived/driest for the interviewed farmer households?
+```{r}
+
+# Here I take the entire dataframe, and remove the "[]".
+View(safi$months_no_water)
+safi$months_no_water_replaced <- gsub("\\[", "", safi$months_no_water)
+safi$months_no_water_replaced <- gsub("\\]", "", safi$months_no_water_replaced)
+safi$months_no_water_replaced <- gsub(" ; ", " ", safi$months_no_water_replaced)
+
+# I then split the string into seperate elements (making each cell into a list)
+safi$months_no_water_replaced <- strsplit(safi$months_no_water_replaced, " ")
+
+# I then take each list for each cell and combine them into one long list
+unique(unlist(safi$months_no_water_replaced))
+complete_list <- unlist(safi$months_no_water_replaced)
+
+# I remove NA's
+complete_list[complete_list == "" |complete_list == "NULL" ] <- NA
+complete_list <- complete_list[!is.na(complete_list)]
+
+# Answer to question 3, homework:
+# I then print the table, which has the count for each unique item in the list.
+print(table(complete_list))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

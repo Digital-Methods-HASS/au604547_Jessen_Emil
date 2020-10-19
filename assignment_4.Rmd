@@ -1,0 +1,41 @@
+---
+title: "assignment_4"
+author: "Emil Jessen"
+date: "1 okt 2020"
+output: html_document
+---
+```{r}
+getwd()
+
+dir.create("data")
+
+download.file("https://ndownloader.figshare.com/files/11492171",
+              "data/SAFI_clean.csv", mode = "wb")
+```
+
+```{r}
+
+hectar <- 1
+acre <- hectar*2.47
+
+len <- 10
+width <- 20
+area <- len*width
+
+
+x <- c("8",F)
+class(x)
+
+length(x)
+?length
+help(length)
+
+?str
+
+
+```
+
+```{r}
+
+```
+

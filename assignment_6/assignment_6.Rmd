@@ -1,0 +1,74 @@
+---
+title: "Assignment 6"
+author: "Emil Jessen"
+date: "19 okt 2020"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+
+```{r}
+setwd("C:/Users/Lenovo/Desktop/Diverse dokumenter/Cognitive Science/cultural_data_science/assignment_6")
+library("pacman")
+p_load(gapminder, tidyverse)
+```
+
+Write a script that loops over each country in the gapminder dataset, tests whether the country starts with a ‘B’ , and print out whether the life expectancy is smaller than 50, between 50 and 70, or greater than 70.
+
+```{r}
+df <- gapminder
+df <- data.frame(lapply(df, as.character), stringsAsFactors=FALSE)
+
+
+small_life_exp <- c()
+medium_life_exp <- c()
+large_life_exp <- c()
+
+for (i in 1:length(df$country)){
+  country <- df[i,"country"]
+  if (substring(country,1,1) == "B"){
+    if (df[i,"lifeExp"] <= 49){
+      small <- df[i,"country"]
+      small_life_exp <- c(small_life_exp,small)
+    }
+    else if (df[i,"lifeExp"] >= 49 & df[i,"lifeExp"] <= 70){
+      medium <- df[i,"country"]
+      medium_life_exp <- c(medium_life_exp,medium)
+    }
+    else {
+      large <- df[i,"country"]
+      large_life_exp <- c(large_life_exp,large)
+    }
+  }
+}
+
+# Printing each of the 3 groups
+print(small_life_exp)
+print(medium_life_exp)
+print(large_life_exp)
+```
+
+Define a defensive function that calculates the Gross Domestic Product of a nation from the data available in the gapminder dataset. Using that function, calculate the GDP of Denmark in the following years: 1967, 1977, 1987, 1997, 2007, and 2017.
+```{r}
+#Function
+calc_GDP <- function(gdp_per_cap, pop){
+  gdp <- (pop*gdp_per_cap)
+  return(gdp)
+}
+
+#Making the data ready for the function
+df$gdpPercap <- as.numeric(df$gdpPercap)
+df$pop <- as.numeric(df$pop)
+df <- as.data.frame(df)
+
+#trying out the function, and here ascribing the values for a new column
+df$gdp_country <- df %>% do(data.frame(df=calc_GDP(gdp_per_cap = df$gdpPercap, pop = df$pop)))
+
+# Printing the gdp's for the years asked
+print(df[df$country=="Denmark" & df$year == "1967", "gdp_country"])
+print(df[df$country=="Denmark" & df$year == "1977", "gdp_country"])
+print(df[df$country=="Denmark" & df$year == "1987", "gdp_country"])
+print(df[df$country=="Denmark" & df$year == "1997", "gdp_country"])
+print(df[df$country=="Denmark" & df$year == "2007", "gdp_country"])
+```
